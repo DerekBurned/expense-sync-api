@@ -7,7 +7,7 @@
 
 A specialized RESTful API designed to serve as the backend for an **Offline-First Mobile Application**. Built with Spring Boot and Clean Architecture principles.
 
-🔗 **Frontend Companion App:** [](https://github.com/DerekBurned/expenses-tracker-app/blob/master/README.md)
+🔗 **Frontend Companion App:** [Expenses-tracker-app](https://github.com/DerekBurned/expenses-tracker-app/blob/master/README.md)
 
 ---
 
