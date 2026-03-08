@@ -1,4 +1,4 @@
-# 🚀 ExpenseSync API (Mobile Backend)
+#  ExpenseSync API (Mobile Backend)
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
@@ -7,11 +7,11 @@
 
 A specialized RESTful API designed to serve as the backend for an **Offline-First Mobile Application**. Built with Spring Boot and Clean Architecture principles.
 
-🔗 **Frontend Companion App:** []
+ **Frontend Companion App:** [Expenses-tracker-app](https://github.com/DerekBurned/expenses-tracker-app/blob/master/README.md)
 
 ---
 
-## 📱 The Problem It Solves
+##  The Problem It Solves
 Mobile apps frequently lose network connection. Standard CRUD APIs fail when a user tries to save data offline. 
 
 This backend is designed to support an **Offline-First Sync Strategy**:
@@ -23,7 +23,7 @@ This backend is designed to support an **Offline-First Sync Strategy**:
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 * **Framework:** Spring Boot 3.x
 * **Language:** Java 17+
 * **Build Tool:** Maven
@@ -32,7 +32,7 @@ This backend is designed to support an **Offline-First Sync Strategy**:
 
 ---
 
-## 📡 API Endpoints
+##  API Endpoints
 
 | Method | Endpoint | Description | Payload |
 | :--- | :--- | :--- | :--- |
