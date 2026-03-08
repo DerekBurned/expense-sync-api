@@ -1,27 +1,27 @@
 package org.example.expensestrack.controllers;
 
-import org.example.expensestrack.Model.Category;
-import org.example.expensestrack.Model.CategoryDTO;
+import org.example.expensestrack.Model.Settings;
+import org.example.expensestrack.Model.SettingsDTO;
 import org.example.expensestrack.Model.TransactionType;
-import org.example.expensestrack.services.CategoryService;
+import org.example.expensestrack.services.SettingsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
-public class CategoryController {
+public class SettingsController {
 
-    private final CategoryService service;
+    private final SettingsService service;
 
-    public CategoryController(CategoryService service) {
+    public SettingsController(SettingsService service) {
         this.service = service;
     }
 
     // GET /api/categories?userId=abc
     // GET /api/categories?userId=abc&type=EXPENSE
     @GetMapping
-    public List<Category> getCategories(
+    public List<Settings> getCategories(
             @RequestParam String userId,
             @RequestParam(required = false) TransactionType type
     ) {
@@ -30,7 +30,7 @@ public class CategoryController {
 
     // POST /api/categories/sync  ← bulk sync offline-created categories
     @PostMapping("/sync")
-    public ResponseEntity<String> syncCategories(@RequestBody List<CategoryDTO> categories) {
+    public ResponseEntity<String> syncCategories(@RequestBody List<SettingsDTO> categories) {
         int count = service.syncCategories(categories);
         return ResponseEntity.ok("Synced " + count + " new categories.");
     }

@@ -1,6 +1,6 @@
 package org.example.expensestrack.Model;
 
-public class CategoryDTO {
+public class SettingsDTO {
     private String localId;
     private String name;
     private TransactionType transactionType;

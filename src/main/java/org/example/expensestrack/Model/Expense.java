@@ -26,7 +26,7 @@ public class Expense {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category; // ← now a full entity, not an enum
+    private Settings settings; // ← now a full entity, not an enum
 
     private String userId;
     private LocalDateTime expenseDate;
@@ -34,13 +34,13 @@ public class Expense {
     public Expense() {}
 
     public Expense(String localId, BigDecimal amount, String description,
-                   TransactionType transactionType, Category category,
+                   TransactionType transactionType, Settings settings,
                    String userId, LocalDateTime expenseDate) {
         this.localId = localId;
         this.amount = amount;
         this.description = description;
         this.transactionType = transactionType;
-        this.category = category;
+        this.settings = settings;
         this.userId = userId;
         this.expenseDate = expenseDate;
     }
@@ -54,8 +54,8 @@ public class Expense {
     public void setDescription(String description) { this.description = description; }
     public TransactionType getTransactionType() { return transactionType; }
     public void setTransactionType(TransactionType transactionType) { this.transactionType = transactionType; }
-    public Category getCategory() { return category; }
-    public void setCategory(Category category) { this.category = category; }
+    public Settings getCategory() { return settings; }
+    public void setCategory(Settings settings) { this.settings = settings; }
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
     public LocalDateTime getExpenseDate() { return expenseDate; }
