@@ -17,14 +17,27 @@ public class ExpenseController {
         this.service = service;
     }
 
+    // POST /api/expenses/sync
     @PostMapping("/sync")
     public ResponseEntity<String> syncExpenses(@RequestBody List<ExpenseDTO> expenses) {
         int savedCount = service.syncOfflineExpenses(expenses);
-        return ResponseEntity.ok("Synced successfully. Added " + savedCount + " new expenses.");
+        return ResponseEntity.ok("Synced " + savedCount + " new expenses.");
     }
 
+    // GET /api/expenses?userId=abc&sortBy=date
     @GetMapping
-    public List<Expense> getAll() {
-        return service.getAllExpenses();
+    public List<Expense> getAll(
+            @RequestParam String userId,
+            @RequestParam(defaultValue = "date") String sortBy
+    ) {
+        return service.getAllExpenses(userId, sortBy);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteExpense(@PathVariable String id) {
+        boolean deleted = service.deleteExpenseById(id);
+        return deleted
+                ? ResponseEntity.ok("Deleted")
+                : ResponseEntity.notFound().build();
     }
 }
