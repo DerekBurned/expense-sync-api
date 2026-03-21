@@ -9,17 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Fixes applied:
- * 1. getAll() now returns List<ExpenseResponseDTO> instead of List<Expense>.
- *    Returning the raw JPA entity serialised the nested Settings object as a
- *    JSON object under the key "category", which Android's flat TransactionDTO
- *    (with field "categoryLocalId") couldn't deserialise — every category came
- *    back as DEFAULT/OTHER.
- *
- * 2. deleteExpense() — no change needed; service.deleteExpenseById() already
- *    returns boolean after the ExpenseService fix.
- */
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
@@ -32,18 +21,20 @@ public class ExpenseController {
 
     @PostMapping("/sync")
     public ResponseEntity<String> syncExpenses(@RequestBody List<ExpenseDTO> expenses) {
-        int savedCount = service.syncOfflineExpenses(expenses);
-        return ResponseEntity.ok("Synced " + savedCount + " new expenses.");
+        int saved = service.syncOfflineExpenses(expenses);
+        return ResponseEntity.ok("Synced " + saved + " new expenses.");
     }
 
     /**
-     * FIX: project to ExpenseResponseDTO so the JSON shape matches Android's
-     * flat TransactionDTO (fields: localId, amount, description, transactionType,
-     * categoryLocalId, date).
+     * userId is now optional (required = false, default = "default-user").
+     *
+     * Android sends no userId at the moment. Making it optional means the
+     * endpoint returns 200 with results instead of 400 Bad Request, so the
+     * app can actually display data. Replace the default with real auth later.
      */
     @GetMapping
     public List<ExpenseResponseDTO> getAll(
-            @RequestParam String userId,
+            @RequestParam(required = false, defaultValue = "default-user") String userId,
             @RequestParam(defaultValue = "date") String sortBy
     ) {
         return service.getAllExpenses(userId, sortBy)

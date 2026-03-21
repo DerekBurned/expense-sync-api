@@ -8,15 +8,23 @@ public class ExpenseDTO {
     private BigDecimal amount;
     private String description;
     private TransactionType transactionType;
-    private String categoryLocalId; // ← reference by localId, not the full object
+    private String categoryLocalId;
     private String userId;
     private LocalDateTime expenseDate;
 
-    public String getLocalId() { return localId; }
-    public BigDecimal getAmount() { return amount; }
-    public String getDescription() { return description; }
+    public String getLocalId()             { return localId; }
+    public BigDecimal getAmount()          { return amount; }
+    public String getDescription()         { return description; }
     public TransactionType getTransactionType() { return transactionType; }
-    public String getCategoryLocalId() { return categoryLocalId; }
-    public String getUserId() { return userId; }
-    public LocalDateTime getExpenseDate() { return expenseDate; }
+    public String getCategoryLocalId()     { return categoryLocalId; }
+
+    /**
+     * Android does not send userId yet. Default to "default-user" so expenses
+     * are stored under a real userId and GET /api/expenses can find them.
+     */
+    public String getUserId() {
+        return (userId != null && !userId.isBlank()) ? userId : "default-user";
+    }
+
+    public LocalDateTime getExpenseDate()  { return expenseDate; }
 }

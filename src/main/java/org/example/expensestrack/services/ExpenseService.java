@@ -7,18 +7,15 @@ import org.example.expensestrack.repository.ExpenseRepository;
 import org.example.expensestrack.repository.SettingsRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Fix: deleteExpenseById() previously returned repository.deleteByLocalId()
- * which is now void (with @Modifying). Use existsByLocalId() first.
- */
 @Service
 public class ExpenseService {
 
-    private final ExpenseRepository    repository;
-    private final SettingsRepository   categoryRepository;
+    private final ExpenseRepository  repository;
+    private final SettingsRepository categoryRepository;
 
     public ExpenseService(ExpenseRepository repository, SettingsRepository categoryRepository) {
         this.repository         = repository;
@@ -26,37 +23,39 @@ public class ExpenseService {
     }
 
     public int syncOfflineExpenses(List<ExpenseDTO> dtos) {
-        List<Expense> newExpenses = new ArrayList<>();
+        List<Expense> toSave = new ArrayList<>();
 
         for (ExpenseDTO dto : dtos) {
             if (!repository.existsByLocalId(dto.getLocalId())) {
-                Settings settings = categoryRepository
+
+                Settings category = categoryRepository
                         .findByLocalId(dto.getCategoryLocalId())
                         .orElse(null);
 
-                newExpenses.add(new Expense(
+                // Fall back to now() if the client sent no date
+                LocalDateTime date = dto.getExpenseDate() != null
+                        ? dto.getExpenseDate()
+                        : LocalDateTime.now();
+
+                toSave.add(new Expense(
                         dto.getLocalId(),
                         dto.getAmount(),
                         dto.getDescription(),
                         dto.getTransactionType(),
-                        settings,
+                        category,
                         dto.getUserId(),
-                        dto.getExpenseDate()
+                        date
                 ));
             }
         }
 
-        repository.saveAll(newExpenses);
-        return newExpenses.size();
+        repository.saveAll(toSave);
+        return toSave.size();
     }
 
-    /**
-     * FIX: check existence before deleting; repository method is now void.
-     */
+    // deleteByLocalId() is now void — check existence first, then delete.
     public boolean deleteExpenseById(String localId) {
-        if (!repository.existsByLocalId(localId)) {
-            return false;
-        }
+        if (!repository.existsByLocalId(localId)) return false;
         repository.deleteByLocalId(localId);
         return true;
     }
