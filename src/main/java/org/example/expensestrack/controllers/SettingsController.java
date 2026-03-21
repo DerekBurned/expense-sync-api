@@ -6,8 +6,15 @@ import org.example.expensestrack.Model.TransactionType;
 import org.example.expensestrack.services.SettingsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
+/**
+ * Fix: deleteCategory() previously relied on repository.deleteByLocalId()
+ * returning a boolean. The repository fix changed that to void + @Modifying,
+ * so the service (and controller) must use existsByLocalId() to determine
+ * whether the record was present before deleting.
+ */
 @RestController
 @RequestMapping("/api/categories")
 public class SettingsController {
@@ -18,8 +25,6 @@ public class SettingsController {
         this.service = service;
     }
 
-    // GET /api/categories?userId=abc
-    // GET /api/categories?userId=abc&type=EXPENSE
     @GetMapping
     public List<Settings> getCategories(
             @RequestParam String userId,
@@ -28,7 +33,6 @@ public class SettingsController {
         return service.getCategories(userId, type);
     }
 
-    // POST /api/categories/sync  ← bulk sync offline-created categories
     @PostMapping("/sync")
     public ResponseEntity<String> syncCategories(@RequestBody List<SettingsDTO> categories) {
         int count = service.syncCategories(categories);
@@ -37,8 +41,8 @@ public class SettingsController {
 
     @DeleteMapping("/{localId}")
     public ResponseEntity<String> deleteCategory(@PathVariable String localId) {
-        boolean deleted = service.deleteCategory(localId);
-        return deleted
+        boolean existed = service.deleteCategory(localId);
+        return existed
                 ? ResponseEntity.ok("Deleted")
                 : ResponseEntity.notFound().build();
     }

@@ -5,6 +5,7 @@ import org.example.expensestrack.Model.SettingsDTO;
 import org.example.expensestrack.Model.TransactionType;
 import org.example.expensestrack.repository.SettingsRepository;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,16 +23,30 @@ public class SettingsService {
                 : repository.findAllByUserId(userId);
     }
 
-    // Sync offline-created categories (same pattern as expenses)
+    /**
+     * FIX: Previously the loop incremented `count` but never called
+     * repository.save(), so categories sent from Android were silently dropped.
+     * Now we build a batch list and call saveAll() once.
+     */
     public int syncCategories(List<SettingsDTO> dtos) {
-        int count = 0;
+        List<Settings> toSave = new ArrayList<>();
+
         for (SettingsDTO dto : dtos) {
             if (!repository.existsByLocalId(dto.getLocalId())) {
-
-                count++;
+                Settings settings = new Settings();
+                settings.setLocalId(dto.getLocalId());
+                settings.setName(dto.getName());
+                settings.setTransactionType(dto.getTransactionType());
+                settings.setUserId(dto.getUserId());
+                toSave.add(settings);
             }
         }
-        return count;
+
+        if (!toSave.isEmpty()) {
+            repository.saveAll(toSave);
+        }
+
+        return toSave.size();
     }
 
     public boolean deleteCategory(String localId) {
