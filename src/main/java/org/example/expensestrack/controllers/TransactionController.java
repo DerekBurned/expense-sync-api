@@ -1,8 +1,8 @@
 package org.example.expensestrack.controllers;
 
-import org.example.expensestrack.Model.ExpenseDTO;
-import org.example.expensestrack.Model.ExpenseResponseDTO;
-import org.example.expensestrack.services.ExpenseService;
+import org.example.expensestrack.Model.TransactionDTO;
+import org.example.expensestrack.Model.TransactionResponseDTO;
+import org.example.expensestrack.services.TransactionsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,18 +10,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/expenses")
-public class ExpenseController {
+@RequestMapping("/api/transactions")
+public class TransactionController {
 
-    private final ExpenseService service;
+    private final TransactionsService service;
 
-    public ExpenseController(ExpenseService service) {
+    public TransactionController(TransactionsService service) {
         this.service = service;
     }
 
     @PostMapping("/sync")
-    public ResponseEntity<String> syncExpenses(@RequestBody List<ExpenseDTO> expenses) {
-        int saved = service.syncOfflineExpenses(expenses);
+    public ResponseEntity<String> syncTransactions(@RequestBody List<TransactionDTO> expenses) {
+        int saved = service.syncOfflineTransactions(expenses);
         return ResponseEntity.ok("Synced " + saved + " new expenses.");
     }
 
@@ -33,18 +33,18 @@ public class ExpenseController {
      * app can actually display data. Replace the default with real auth later.
      */
     @GetMapping
-    public List<ExpenseResponseDTO> getAll(
+    public List<TransactionResponseDTO> getAll(
             @RequestParam(required = false, defaultValue = "default-user") String userId,
             @RequestParam(defaultValue = "date") String sortBy
     ) {
         return service.getAllExpenses(userId, sortBy)
                 .stream()
-                .map(ExpenseResponseDTO::from)
+                .map(TransactionResponseDTO::from)
                 .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteExpense(@PathVariable String id) {
+    public ResponseEntity<String> deleteTransaction(@PathVariable String id) {
         boolean deleted = service.deleteExpenseById(id);
         return deleted
                 ? ResponseEntity.ok("Deleted")

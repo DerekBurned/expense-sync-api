@@ -1,9 +1,9 @@
 package org.example.expensestrack.services;
 
-import org.example.expensestrack.Model.Expense;
-import org.example.expensestrack.Model.ExpenseDTO;
+import org.example.expensestrack.Model.Transaction;
+import org.example.expensestrack.Model.TransactionDTO;
 import org.example.expensestrack.Model.Settings;
-import org.example.expensestrack.repository.ExpenseRepository;
+import org.example.expensestrack.repository.TransactionsRepository;
 import org.example.expensestrack.repository.SettingsRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,20 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ExpenseService {
+public class TransactionsService {
 
-    private final ExpenseRepository  repository;
+    private final TransactionsRepository repository;
     private final SettingsRepository categoryRepository;
 
-    public ExpenseService(ExpenseRepository repository, SettingsRepository categoryRepository) {
+    public TransactionsService(TransactionsRepository repository, SettingsRepository categoryRepository) {
         this.repository         = repository;
         this.categoryRepository = categoryRepository;
     }
 
-    public int syncOfflineExpenses(List<ExpenseDTO> dtos) {
-        List<Expense> toSave = new ArrayList<>();
+    public int syncOfflineTransactions(List<TransactionDTO> dtos) {
+        List<Transaction> toSave = new ArrayList<>();
 
-        for (ExpenseDTO dto : dtos) {
+        for (TransactionDTO dto : dtos) {
             if (!repository.existsByLocalId(dto.getLocalId())) {
 
                 Settings category = categoryRepository
@@ -33,11 +33,11 @@ public class ExpenseService {
                         .orElse(null);
 
                 // Fall back to now() if the client sent no date
-                LocalDateTime date = dto.getExpenseDate() != null
-                        ? dto.getExpenseDate()
+                LocalDateTime date = dto.getTransactionDate() != null
+                        ? dto.getTransactionDate()
                         : LocalDateTime.now();
 
-                toSave.add(new Expense(
+                toSave.add(new Transaction(
                         dto.getLocalId(),
                         dto.getAmount(),
                         dto.getDescription(),
@@ -60,10 +60,10 @@ public class ExpenseService {
         return true;
     }
 
-    public List<Expense> getAllExpenses(String userId, String sortBy) {
+    public List<Transaction> getAllExpenses(String userId, String sortBy) {
         return switch (sortBy) {
             case "amount" -> repository.findAllByUserIdOrderByAmountDesc(userId);
-            default       -> repository.findAllByUserIdOrderByExpenseDateDesc(userId);
+            default       -> repository.findAllByUserIdOrderByTransactionDateDesc(userId);
         };
     }
 }

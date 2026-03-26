@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
         @Index(columnList = "expenseDate"),
         @Index(columnList = "localId", unique = true)
 })
-public class Expense {
+public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,20 +29,20 @@ public class Expense {
     private Settings settings; // ← now a full entity, not an enum
 
     private String userId;
-    private LocalDateTime expenseDate;
+    private LocalDateTime transactionDate;
 
-    public Expense() {}
+    public Transaction() {}
 
-    public Expense(String localId, BigDecimal amount, String description,
-                   TransactionType transactionType, Settings settings,
-                   String userId, LocalDateTime expenseDate) {
+    public Transaction(String localId, BigDecimal amount, String description,
+                       TransactionType transactionType, Settings settings,
+                       String userId, LocalDateTime transactionDate) {
         this.localId = localId;
         this.amount = amount;
         this.description = description;
         this.transactionType = transactionType;
         this.settings = settings;
         this.userId = userId;
-        this.expenseDate = expenseDate;
+        this.transactionDate = transactionDate;
     }
 
     public Long getId() { return id; }
@@ -58,6 +58,6 @@ public class Expense {
     public void setCategory(Settings settings) { this.settings = settings; }
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
-    public LocalDateTime getExpenseDate() { return expenseDate; }
-    public void setExpenseDate(LocalDateTime expenseDate) { this.expenseDate = expenseDate; }
+    public LocalDateTime getTransactionDate() { return transactionDate; }
+    public void setTransactionDate(LocalDateTime transactionDateDate) { this.transactionDate = transactionDateDate; }
 }

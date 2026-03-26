@@ -34,24 +34,24 @@ This backend is designed to support an **Offline-First Sync Strategy**:
 
 ##  API Endpoints
 
-| Method | Endpoint | Description | Payload |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/expenses/sync` | Syncs a batch of offline records from the mobile client. Ignores duplicates. | `List<ExpenseDTO>` |
-| `GET` | `/api/expenses` | Fetches all synced expenses from the server. | None |
+| Method | Endpoint                 | Description                                                                  | Payload |
+| :--- |:-------------------------|:-----------------------------------------------------------------------------| :--- |
+| `POST` | `/api/transactions/sync` | Syncs a batch of offline records from the mobile client. Ignores duplicates. | `List<ExpenseDTO>` |
+| `GET` | `/api/transactions`      | Fetches all synced transactions from the server.                              | None |
 
-### Example Payload (`POST /api/expenses/sync`)
+### Example Payload (`POST /api/transaction/sync`)
 ```json
 [
   {
     "localId": "550e8400-e29b-41d4-a716-446655440000",
     "amount": 42.50,
     "description": "Coffee and Lunch",
-    "expenseDate": "2026-02-26T12:30:00"
+    "transactionDate": "2026-02-26T12:30:00"
   },
   {
     "localId": "b1928374-1234-5678-90ab-cdef12345678",
     "amount": 120.00,
     "description": "Groceries",
-    "expenseDate": "2026-02-25T18:15:00"
+    "transactionDate": "2026-02-25T18:15:00"
   }
 ]

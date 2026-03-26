@@ -3,14 +3,14 @@ package org.example.expensestrack.Model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class ExpenseDTO {
+public class TransactionDTO {
     private String localId;
     private BigDecimal amount;
     private String description;
     private TransactionType transactionType;
     private String categoryLocalId;
     private String userId;
-    private LocalDateTime expenseDate;
+    private LocalDateTime transactionDate;
 
     public String getLocalId()             { return localId; }
     public BigDecimal getAmount()          { return amount; }
@@ -26,5 +26,5 @@ public class ExpenseDTO {
         return (userId != null && !userId.isBlank()) ? userId : "default-user";
     }
 
-    public LocalDateTime getExpenseDate()  { return expenseDate; }
+    public LocalDateTime getTransactionDate()  { return transactionDate; }
 }

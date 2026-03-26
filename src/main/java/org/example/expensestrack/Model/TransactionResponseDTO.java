@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  *   ExpenseController.getAll() is updated to return List<ExpenseResponseDTO>.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ExpenseResponseDTO {
+public class TransactionResponseDTO {
 
     private String localId;
     private double amount;
@@ -36,24 +36,24 @@ public class ExpenseResponseDTO {
     private String categoryLocalId;   // the category name string Android expects
     private String date;              // ISO date string
 
-    public ExpenseResponseDTO() {}
+    public TransactionResponseDTO() {}
 
     /** Factory — converts a JPA Expense entity to the wire format. */
-    public static ExpenseResponseDTO from(Expense expense) {
-        ExpenseResponseDTO dto = new ExpenseResponseDTO();
-        dto.localId          = expense.getLocalId();
-        dto.amount           = expense.getAmount() != null
-                ? expense.getAmount().doubleValue() : 0.0;
-        dto.description      = expense.getDescription();
-        dto.transactionType  = expense.getTransactionType() != null
-                ? expense.getTransactionType().name() : "EXPENSE";
+    public static TransactionResponseDTO from(Transaction transaction) {
+        TransactionResponseDTO dto = new TransactionResponseDTO();
+        dto.localId          = transaction.getLocalId();
+        dto.amount           = transaction.getAmount() != null
+                ? transaction.getAmount().doubleValue() : 0.0;
+        dto.description      = transaction.getDescription();
+        dto.transactionType  = transaction.getTransactionType() != null
+                ? transaction.getTransactionType().name() : "EXPENSE";
         // Resolve category name: use the Settings entity's `name` field if present,
         // otherwise fall back to the transactionType so Android can at least map it.
-        dto.categoryLocalId  = expense.getCategory() != null
-                ? expense.getCategory().getName()
+        dto.categoryLocalId  = transaction.getCategory() != null
+                ? transaction.getCategory().getName()
                 : dto.transactionType;
-        dto.date             = expense.getExpenseDate() != null
-                ? expense.getExpenseDate().toLocalDate().toString() : "";
+        dto.date             = transaction.getTransactionDate() != null
+                ? transaction.getTransactionDate().toLocalDate().toString() : "";
         return dto;
     }
 

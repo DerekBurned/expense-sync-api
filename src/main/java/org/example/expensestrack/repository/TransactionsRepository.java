@@ -1,6 +1,6 @@
 package org.example.expensestrack.repository;
 
-import org.example.expensestrack.Model.Expense;
+import org.example.expensestrack.Model.Transaction;
 import org.example.expensestrack.Model.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface ExpenseRepository extends JpaRepository<Expense, Long> {
+public interface TransactionsRepository extends JpaRepository<Transaction, Long> {
 
     boolean existsByLocalId(String localId);
 
@@ -25,7 +25,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     @Transactional
     void deleteAllByExpenseDate(LocalDateTime expenseDate);
 
-    List<Expense> findAllByUserIdOrderByExpenseDateDesc(String userId);
-    List<Expense> findAllByUserIdOrderByAmountDesc(String userId);
-    List<Expense> findAllByUserIdAndTransactionType(String userId, TransactionType type);
+    List<Transaction> findAllByUserIdOrderByTransactionDateDesc(String userId);
+    List<Transaction> findAllByUserIdOrderByAmountDesc(String userId);
+    List<Transaction> findAllByUserIdAndTransactionType(String userId, TransactionType type);
 }
