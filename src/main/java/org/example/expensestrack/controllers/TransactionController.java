@@ -48,6 +48,17 @@ public class TransactionController {
         return TransactionResponseDTO.from(service.getExpenseById(id));
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateById(@PathVariable String id, @RequestBody TransactionDTO dto) {
+        //TODO("Implement transaction update method")
+        return ResponseEntity.ok("Updated " + dto);
+    }
+    @GetMapping("/exists/{id}")
+    public ResponseEntity<Boolean> existsById(@PathVariable String id) {
+        boolean exists = service.getExpenseById(id) != null;
+        return exists ? ResponseEntity.ok(true) : ResponseEntity.ok(false);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTransaction(@PathVariable String id) {
         boolean deleted = service.deleteExpenseById(id);
