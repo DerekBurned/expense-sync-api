@@ -59,6 +59,10 @@ public class TransactionsService {
         repository.deleteByLocalId(localId);
         return true;
     }
+    public Transaction getExpenseById(String localId) {
+        if (!repository.existsByLocalId(localId)) return null;
+        return  repository.getTransactionByLocalId(localId);
+    }
 
     public List<Transaction> getAllExpenses(String userId, String sortBy) {
         return switch (sortBy) {

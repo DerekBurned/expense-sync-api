@@ -23,8 +23,9 @@ public interface TransactionsRepository extends JpaRepository<Transaction, Long>
 
     @Modifying
     @Transactional
-    void deleteAllByExpenseDate(LocalDateTime expenseDate);
+    void deleteAllByTransactionDate(LocalDateTime expenseDate);
 
+    Transaction getTransactionByLocalId(String localId);
     List<Transaction> findAllByUserIdOrderByTransactionDateDesc(String userId);
     List<Transaction> findAllByUserIdOrderByAmountDesc(String userId);
     List<Transaction> findAllByUserIdAndTransactionType(String userId, TransactionType type);

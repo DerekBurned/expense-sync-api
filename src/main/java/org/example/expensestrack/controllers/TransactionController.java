@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -41,6 +42,10 @@ public class TransactionController {
                 .stream()
                 .map(TransactionResponseDTO::from)
                 .collect(Collectors.toList());
+    }
+    @GetMapping("/{id}")
+    public TransactionResponseDTO getById(@PathVariable String id) {
+        return TransactionResponseDTO.from(service.getExpenseById(id));
     }
 
     @DeleteMapping("/{id}")
